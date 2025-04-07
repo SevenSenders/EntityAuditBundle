@@ -15,6 +15,7 @@ namespace SimpleThings\EntityAudit\Collection;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use SimpleThings\EntityAudit\AuditConfiguration;
@@ -522,6 +523,11 @@ class AuditedCollection implements Collection
             $params[] = $value;
         }
 
+        if ($this->metadata->isInheritanceTypeSingleTable()){
+            $sql .= 'AND '.$this->metadata->getDiscriminatorColumn()['name'].' = ? ';
+            $params[] = $this->metadata->discriminatorValue;
+        }
+
         // we check for revisions greater than current belonging to other entities
         $sql .= 'AND NOT EXISTS (SELECT * FROM '.$this->configuration->getTableName($this->metadata).' st WHERE';
 
@@ -601,5 +607,15 @@ class AuditedCollection implements Collection
         }
 
         $this->initialized = true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function matching(Criteria $criteria)
+    {
+        $this->forceLoad();
+
+        return $this->loadedEntities->matching($criteria);
     }
 }
