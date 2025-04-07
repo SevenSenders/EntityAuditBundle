@@ -16,6 +16,7 @@ namespace SimpleThings\EntityAudit\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Selectable;
 use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use SimpleThings\EntityAudit\AuditConfiguration;
@@ -27,7 +28,7 @@ use SimpleThings\EntityAudit\Exception\AuditedCollectionException;
  * @phpstan-template T of object
  * @phpstan-implements Collection<TKey, T>
  */
-class AuditedCollection implements Collection
+class AuditedCollection implements Collection, Selectable
 {
     /**
      * @var AuditConfiguration
