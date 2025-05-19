@@ -39,6 +39,9 @@ use SimpleThings\EntityAudit\Utils\ORMCompatibilityTrait;
 
 /**
  * NEXT_MAJOR: do not implement EventSubscriber interface anymore.
+ * NEXT_MAJOR: Declare the class as final.
+ *
+ * @final since 1.19.0
  */
 class LogRevisionsListener implements EventSubscriber
 {
@@ -130,7 +133,7 @@ class LogRevisionsListener implements EventSubscriber
                 if ($meta->hasField($fieldName)) {
                     /** @phpstan-var literal-string $field */
                     $field = $quoteStrategy->getColumnName($field, $meta, $platform);
-                    $fieldType = $meta->getTypeOfField($field);
+                    $fieldType = $meta->getTypeOfField($fieldName);
                     if (null !== $fieldType) {
                         $type = Type::getType($fieldType);
                         /** @phpstan-var literal-string $placeholder */
